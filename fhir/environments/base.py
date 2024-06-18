@@ -10,12 +10,7 @@ class Settings(NanoSettings):
     project_id: str = ""
     log_level: Literal["DEBUG", "INFO", "WARN", "ERROR", "FATAL"] = "INFO"
     production: bool
-    rabbitmq_host: str
-    rabbitmq_port: int
-    rabbitmq_exchange: str
-    bubble_api_url:str
-    rabbitmq_user: Secret
-    rabbitmq_password: Secret
+    proxied: bool
 
     model_config = SettingsConfigDict(env_file=f"fhir/environments/.{os.environ["ENV"]}.env", env_prefix="fhir_")
 

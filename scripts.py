@@ -21,6 +21,8 @@ class Envs(Enum):
     dev="dev"
     prod="prod"
 
+APP_NAME = _get_app_name_from_pyproject()
+
 def before_start(func:Callable):
     try:
         getattr(Envs, os.environ["ENV"])
@@ -35,14 +37,14 @@ def start():
     """Start app
     """
     app_name = _get_app_name_from_pyproject()
-    command = f"python {app_name}/main.py"
+    command = f"python -m uvicorn {APP_NAME}.main:app --host 0.0.0.0 --port 7001"
     subprocess.run(command.split())
 
 def start_local():
     """Start app
     """
     app_name = _get_app_name_from_pyproject()
-    command = f"python {app_name}/main.py"
+    command = f"python -m uvicorn {APP_NAME}.main:app --host 0.0.0.0 --port 7001"
     subprocess.run(command.split())
 
 def pytest():
