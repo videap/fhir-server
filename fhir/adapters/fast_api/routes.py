@@ -4,9 +4,7 @@ from typing import Annotated, List, Dict, Any, Literal
 from fhir.environments.base import get_settings
 from fhir.adapters.fast_api.security import VerifyAPIKeyMiddleware
 from fhir.utils.logger import logger
-from time import sleep
-from fastapi.openapi.docs import get_swagger_ui_html
-from fastapi.security import HTTPBasicCredentials
+from fhir.adapters.sql.interface import PatientDAO
 from pydantic import ValidationError
 
 # Start Web Server
@@ -16,7 +14,7 @@ if s.proxied:
 else:
     route = ""
 
-app = server.start(root_path = route, docs_url=None, redoc_url=None)
+app = server.start(root_path = route, redoc_url=None)
 
 if s.production:
     app.add_middleware(VerifyAPIKeyMiddleware)
@@ -25,4 +23,16 @@ if s.production:
 def health() -> bool:
     return True
 
-# User Routes
+# Routes
+@app.post("/fhir/Patient", response_model=PatientDAO)
+def create_patient(patient: PatientDAO) -> PatientDAO:
+    patient.create()
+    return patient
+
+@app.get("/fhir/Patient/{id}", response_model=PatientDAO)
+def get_patient(id: str) -> PatientDAO:
+    db_patient = PatientDAO(id=id)
+    try:
+        return db_patient.get()
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Patient not found")
