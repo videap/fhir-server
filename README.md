@@ -1,7 +1,5 @@
-# fhir
-According to hexagonal architecture, this repo is the <????> connector. It has the purpose of:
-
-- ...
+# FHIR
+Test server for FHIR integration
 
 # Requirements
 
