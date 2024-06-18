@@ -1,0 +1,10 @@
+apiVersion: v2
+name: scheduler
+description: Scheduler microservice
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: nanoservice
+    version: "1.x"
+    repository: "https://raw.githubusercontent.com/nanoclinic/charts/gh-pages"

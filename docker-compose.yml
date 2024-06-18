@@ -1,0 +1,26 @@
+version: '3.1'
+
+x-envs: &envs
+  env_file: ./fhir/environments/.local.env
+  environment:
+    ENV: dev
+    RABBITMQ_HOST: rabbitmq
+
+
+services:
+  fhir:
+    <<: [*envs]
+    image: fhir
+    container_name: fhir
+    build:
+      target: prod
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - GITHUB_USER=${GITHUB_USER}
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
+
+networks:
+  default:
+    name: nano-network
+    driver: bridge

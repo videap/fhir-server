@@ -1,0 +1,30 @@
+*.env
+*key.json
+.idea
+
+#Python
+**/__pycache__
+_version.py
+dist
+delta.egg-info/
+
+#VS Code
+.vscode
+
+#Python coverage
+**/*.lcov
+**/.coverage
+**/coverage.xml
+**/htmlcov
+
+#MacOS DS_Store files
+**/.DS_Store
+
+#Sonar
+.scannerwork
+
+#Terraform
+**/.terraform
+
+#Helm
+**/charts

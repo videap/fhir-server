@@ -1,0 +1,65 @@
+name: build-fhir
+
+on:
+  push:
+    tags:
+      - v*
+  pull_request_review:
+    types: [submitted]
+  workflow_dispatch:
+
+env:
+  git_head: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-22.04
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.review.state == 'APPROVED'
+    steps:
+      - name: Checkout fhir code
+        uses: actions/checkout@v4
+        with:
+          path: fhir
+
+      - name: Checkout fhir code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: nanoclinic/foundation
+          ref: main
+          path: foundation
+
+      - name: set_run_vars
+        id: set_vars
+        run: |
+          if [[ $gh_event == "push" ]]; then
+            set_latest=true
+          else
+            set_latest=false
+          fi
+          echo "set_latest=${set_latest}" | tee -a $GITHUB_OUTPUT
+
+
+      - name: Authenticate with GCP
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: nanoclinic-common
+          credentials_json: ${{ secrets.PIPELINES_SA_KEY }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: nanoclinic-common
+
+      - name: build and push to gcr
+        uses: ./foundation/.github/actions/build-and-push-gcr
+        with:
+          dockerfile: Dockerfile
+          dockerfile_path: ./fhir
+          image_name: fhir
+          image_tag: ${{ github.sha }}
+          github_user: ${{ secrets.GH_USER }}
+          github_token: ${{ secrets.GH_TOKEN }}
+          set_latest: ${{ steps.set_vars.outputs.set_latest }}
+          params: ''

@@ -1,0 +1,6 @@
+dependencies:
+- name: nanoservice
+  repository: https://raw.githubusercontent.com/nanoclinic/charts/gh-pages
+  version: 1.4.3
+digest: sha256:461626ddddff06ae730180007a872ea7c18b91c94af6dad0faee9c51a68a159c
+generated: "2024-05-05T18:11:49.164584-03:00"
