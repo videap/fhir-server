@@ -17,6 +17,9 @@ python = "^3.10"
 toml = "^0.10.2"
 nanologger = {git = "https://github.com/nanoclinic/logger.git"}
 nanosettings = {git = "https://github.com/nanoclinic/nanosettings.git"}
+fastapi = "^0.111.0"
+sqlalchemy = "^2.0.30"
+fhir-resources = "^7.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.4,<8"
